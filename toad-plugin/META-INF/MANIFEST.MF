@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Asakusa Toad Editor
+Bundle-SymbolicName: jp.hishidama.toadEditor;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: jp.hishidama.eclipse_plugin.toad.Activator
+Bundle-Vendor: hishidama
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.gef,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface.text,
+ org.eclipse.ui.workbench.texteditor,
+ jp.hishidama.xtext.dmdl_editor;bundle-version="1.0.0",
+ jp.hishidama.xtext.dmdl_editor.ui;bundle-version="1.0.0",
+ jp.hishidama.eclipse_plugin.utility;bundle-version="0.0.1",
+ org.eclipse.jface,
+ org.eclipse.core.filebuffers,
+ org.eclipse.ui.editors
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: plugin.jar,
+ lib/gson/gson-2.2.2.jar

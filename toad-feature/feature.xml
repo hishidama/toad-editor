@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="jp.hishidama.toad_editor.feature"
+      label="Asakusa Toad Editor"
+      version="0.0.1.qualifier"
+      provider-name="hishidama">
+
+   <description url="http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/index.html">
+      Asakusa FrameworkのDSLを描くGUIツールを目指しています。
+   </description>
+
+   <copyright url="http://www.ne.jp/asahi/hishidama/home/notice/index.html">
+      hishidama
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      Asakusa Toad Editor作成中です。
+たぶんEPL（Eclipse Public License）になると思います。
+   </license>
+
+   <plugin
+         id="jp.hishidama.toadEditor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
