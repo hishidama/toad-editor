@@ -3,8 +3,8 @@ Asakusa Toad Editor
 Toad Editorは、
 `GEF <http://www.ne.jp/asahi/hishidama/home/tech/eclipse/plugin/develop/gef/index.html>`_ を用いて作成している、
 `Asakusa Framework <http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/index.html>`_ の
-`Batch DSL <http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/batch_dsl.html>` _ ・
-`Flow DSL <http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/flow_dsl.html>` _
+`Batch DSL <http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/batch_dsl.html>`_ ・
+`Flow DSL <http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/flow_dsl.html>`_
 をGUIで描くツール（を目指した）エディター（Eclipseプラグイン）です。
 
 
