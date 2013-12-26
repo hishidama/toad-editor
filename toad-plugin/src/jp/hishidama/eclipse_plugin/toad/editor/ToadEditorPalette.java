@@ -41,17 +41,17 @@ public class ToadEditorPalette extends PaletteRoot {
 		DiagramType t = diagram.getDiagramType();
 		switch (t) {
 		case BATCH:
-			addEmptyNode(true, false, false);
+			addEmptyNode("空要素", true, false, false);
 			break;
 		default:
-			addEmptyNode(false, true, t == DiagramType.JOBFLOW);
+			addEmptyNode("インポーター/エクスポーター", false, true, t == DiagramType.JOBFLOW);
 			addEmpryOperator();
 			break;
 		}
 	}
 
-	private void addEmptyNode(boolean batch, boolean other, boolean file) {
-		PaletteDrawer drawer = new PaletteDrawer("空要素");
+	private void addEmptyNode(String title, boolean batch, boolean other, boolean file) {
+		PaletteDrawer drawer = new PaletteDrawer(title);
 		if (other) {
 			// drawer.add(new CombinedTemplateCreationEntry("data model",
 			// "empty data model", new DataModelFactory(a), null, null));
@@ -75,7 +75,8 @@ public class ToadEditorPalette extends PaletteRoot {
 	}
 
 	private void addEmpryOperator() {
-		PaletteDrawer drawer = new PaletteDrawer("演算子");
+		PaletteDrawer drawer;
+		drawer = new PaletteDrawer("フロー制御演算子");
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@Branch");
 			factory.setGroup("フロー制御");
@@ -92,6 +93,10 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.setMemo("複数の入力を合流して1つにまとめて出力する演算子です。");
 			add(drawer, factory);
 		}
+		this.add(drawer);
+
+		drawer = new PaletteDrawer("データ操作演算子");
+		drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@Update");
 			factory.setGroup("データ操作");
@@ -146,6 +151,10 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out:出力");
 			add(drawer, factory);
 		}
+		this.add(drawer);
+
+		drawer = new PaletteDrawer("結合演算子");
+		drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@MasterCheck");
 			factory.setGroup("結合");
@@ -200,6 +209,10 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("left:出力1", "right:出力2");
 			add(drawer, factory);
 		}
+		this.add(drawer);
+
+		drawer = new PaletteDrawer("集計演算子");
+		drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@Summarize");
 			factory.setGroup("集計");
@@ -227,6 +240,10 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out1:出力1", "out2:出力2");
 			add(drawer, factory);
 		}
+		this.add(drawer);
+
+		drawer = new PaletteDrawer("特殊演算子");
+		drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "FlowPart");
 			factory.setGroup("特殊");
