@@ -139,7 +139,14 @@ public class DataFileNode extends RectangleNode implements ClassNameNode, HasDat
 
 	@Override
 	public String getClassNamePattern() {
-		return "Abstract*Description";
+		String t = getFileTypeName();
+		if (t.equals("Importer")) {
+			return "*From*";
+		} else if (t.equals("Exporter")) {
+			return "*To*";
+		} else {
+			return "*Description";
+		}
 	}
 
 	@Override
@@ -376,9 +383,9 @@ public class DataFileNode extends RectangleNode implements ClassNameNode, HasDat
 	public void validate(ValidateType vtype, boolean edit, List<IStatus> result) {
 		ToadValidator.validateDescription(vtype, result, getFileTypeName(), getDescription());
 		ToadValidator.validateClassName(vtype, result, getClassName());
-		ToadValidator.validateModelName(vtype, edit, result, getModelName());
+		ToadValidator.validateModelName(vtype, edit, result, null, getModelName());
 		ToadValidator.validateDataFileType(vtype, result, getFileType());
-		if (!edit) {
+		if (vtype != ValidateType.GENERATE && !edit) {
 			validateConnection(vtype, result);
 		}
 		// TODO fileTypeに応じたpropetyMapの精査

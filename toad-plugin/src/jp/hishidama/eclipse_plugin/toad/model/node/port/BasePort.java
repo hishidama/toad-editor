@@ -441,6 +441,6 @@ public abstract class BasePort extends NodeElement implements NameNode, HasDataM
 	@Override
 	public void validate(ValidateType vtype, boolean edit, List<IStatus> result) {
 		ToadValidator.validatePortName(vtype, result, getName());
-		ToadValidator.validateModelName(vtype, edit, result, getModelName());
+		ToadValidator.validateModelName(vtype, edit, result, null, getModelName());
 	}
 }

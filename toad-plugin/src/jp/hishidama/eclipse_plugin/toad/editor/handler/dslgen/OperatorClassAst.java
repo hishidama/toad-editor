@@ -95,6 +95,9 @@ public class OperatorClassAst implements Closeable {
 		TypeResolver resolver = new TypeResolver() {
 			@Override
 			public String resolve(String type) {
+				if (type == null) {
+					return null;
+				}
 				return importRewrite.addImport(type);
 			}
 		};

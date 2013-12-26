@@ -13,6 +13,8 @@ import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElementEditPart;
 import jp.hishidama.eclipse_plugin.toad.model.node.datafile.DataFileNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
+import jp.hishidama.eclipse_plugin.toad.validation.ToadValidator;
+import jp.hishidama.eclipse_plugin.toad.validation.ValidateType;
 import jp.hishidama.eclipse_plugin.util.FileUtil;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.eclipse_plugin.util.ToadFileUtil;
@@ -20,6 +22,7 @@ import jp.hishidama.eclipse_plugin.util.ToadFileUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -28,6 +31,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 public class GenerateDslClassAction extends SelectionAction {
 	public static final String ID = "TOAD_DSL_GENARATE";
@@ -80,18 +85,23 @@ public class GenerateDslClassAction extends SelectionAction {
 
 		List<NodeElement> list = getSelectedObjects();
 		for (NodeElement node : list) {
-			if (node instanceof OperatorNode) {
-				IMethod method = generateOperator((OperatorNode) node);
-				if (result == null) {
-					result = method;
+			try {
+				if (node instanceof OperatorNode) {
+					IMethod method = generateOperator((OperatorNode) node);
+					if (result == null) {
+						result = method;
+					}
+				} else if (node instanceof DataFileNode) {
+					IFile file = generatePorter((DataFileNode) node);
+					if (result == null) {
+						result = file;
+					}
+				} else {
+					throw new IllegalStateException("node=" + node);
 				}
-			} else if (node instanceof DataFileNode) {
-				IFile file = generatePorter((DataFileNode) node);
-				if (result == null) {
-					result = file;
-				}
-			} else {
-				throw new IllegalStateException("node=" + node);
+			} catch (Exception e) {
+				IStatus status = LogUtil.logError("DSLクラス生成時に例外発生", e);
+				ErrorDialog.openError(null, "Generate DSL error", "DSLクラスの生成時に例外が発生しました。", status);
 			}
 		}
 
@@ -111,11 +121,16 @@ public class GenerateDslClassAction extends SelectionAction {
 	}
 
 	private IMethod generateOperator(OperatorNode operator) {
-		String className = operator.getClassName();
-		String methodName = operator.getMethodName();
-		if (StringUtil.isEmpty(className) || StringUtil.isEmpty(methodName)) {
+		List<IStatus> result = new ArrayList<IStatus>();
+		operator.validate(ValidateType.GENERATE, false, result);
+		String message = ToadValidator.getErrorMessage(result);
+		if (message != null) {
+			MessageDialog.openError(null, "Operator DSL (Java class) generate error", message);
 			return null;
 		}
+
+		String className = operator.getClassName();
+		String methodName = operator.getMethodName();
 
 		IJavaProject javaProject = JavaCore.create(project);
 		IType type = findType(javaProject, className);
@@ -165,12 +180,16 @@ public class GenerateDslClassAction extends SelectionAction {
 		}
 	}
 
-	private IFile generatePorter(DataFileNode node) {
-		String className = node.getClassName();
-		if (StringUtil.isEmpty(className)) {
+	private IFile generatePorter(DataFileNode node) throws CoreException {
+		List<IStatus> result = new ArrayList<IStatus>();
+		node.validate(ValidateType.GENERATE, false, result);
+		String message = ToadValidator.getErrorMessage(result);
+		if (message != null) {
+			MessageDialog.openError(null, "Importer/Exporter class generate error", message);
 			return null;
 		}
 
+		String className = node.getClassName();
 		IFile file = ToadFileUtil.getJavaFile(project, className);
 		try {
 			FileUtil.createFolder(project, file);
@@ -179,12 +198,8 @@ public class GenerateDslClassAction extends SelectionAction {
 		}
 
 		GenerateDslClassHandler handler = new GenerateDslClassHandler();
-		try {
-			PorterClassGenerator generator = new PorterClassGenerator(project, node);
-			handler.generateDslClass(file, generator);
-		} catch (Exception e) {
-			LogUtil.logError("generate Importer/Exporter error.", e);
-		}
+		PorterClassGenerator generator = new PorterClassGenerator(project, node);
+		handler.generateDslClass(file, generator);
 
 		return file;
 	}
