@@ -1,5 +1,6 @@
 package jp.hishidama.eclipse_plugin.toad.editor.action;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +85,10 @@ public class GenerateDslClassAction extends SelectionAction {
 		Object result = null;
 
 		List<NodeElement> list = getSelectedObjects();
+		if (!confirm(list)) {
+			return;
+		}
+
 		for (NodeElement node : list) {
 			try {
 				if (node instanceof OperatorNode) {
@@ -100,8 +105,9 @@ public class GenerateDslClassAction extends SelectionAction {
 					throw new IllegalStateException("node=" + node);
 				}
 			} catch (Exception e) {
-				IStatus status = LogUtil.logError("DSLクラス生成時に例外発生", e);
-				ErrorDialog.openError(null, "Generate DSL error", "DSLクラスの生成時に例外が発生しました。", status);
+				IStatus status = LogUtil.logError("DSLクラス生成時に例外発生 node=" + node, e);
+				String message = MessageFormat.format("DSLクラスの生成時に例外が発生しました。\nnode={0}", node);
+				ErrorDialog.openError(null, "Generate DSL error", message, status);
 			}
 		}
 
@@ -111,13 +117,36 @@ public class GenerateDslClassAction extends SelectionAction {
 				try {
 					JavaUI.openInEditor(element);
 				} catch (Exception e) {
-					LogUtil.logError("JavaElement open error.", e);
+					IStatus status = LogUtil.logError("JavaElement open error.", e);
+					String message = MessageFormat.format("Javaソースを開く際に例外が発生しました。\njavaElement={0}", element);
+					ErrorDialog.openError(null, "Generate DSL error", message, status);
 				}
 			} else {
 				IFile file = (IFile) result;
 				FileUtil.openEditor(file);
 			}
 		}
+	}
+
+	private boolean confirm(List<NodeElement> list) {
+		StringBuilder sb = new StringBuilder(256);
+		sb.append("以下のJavaソースを生成します。よろしいですか？\n");
+		for (NodeElement node : list) {
+			sb.append("\n");
+			if (node instanceof OperatorNode) {
+				OperatorNode operator = (OperatorNode) node;
+				sb.append(operator.getClassName());
+				sb.append("#");
+				sb.append(operator.getMethodName());
+				sb.append("()");
+			} else if (node instanceof DataFileNode) {
+				DataFileNode porter = (DataFileNode) node;
+				sb.append(porter.getClassName());
+			}
+		}
+
+		boolean r = MessageDialog.openConfirm(null, "Confirm Generage DSL (Java class)", sb.toString());
+		return r;
 	}
 
 	private IMethod generateOperator(OperatorNode operator) {
