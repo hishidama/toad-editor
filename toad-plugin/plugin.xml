@@ -49,6 +49,9 @@
             icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-batch"
             name="バッチダイアグラム">
+         <description>
+            バッチダイアグラム（Batch DSLのtoadファイル）を作成します。
+         </description>
       </wizard>
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
@@ -56,13 +59,19 @@
             icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-jobflow"
             name="ジョブフローダイアグラム">
+         <description>
+            ジョブフローダイアグラム（Flow DSL（JobFlow）のtoadファイル）を作成します。
+         </description>
       </wizard>
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
             class="jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.NewFlowpartWizard"
             icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-flowpart"
-            name="フローパートダイアグラム">
+            name="フロー演算子ダイアグラム">
+         <description>
+            フロー演算子ダイアグラム（Flow DSL（FlowPart）のtoadファイル）を作成します。
+         </description>
       </wizard>
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
@@ -70,6 +79,9 @@
             icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-importDiagram"
             name="既存DSLクラスからダイアグラム生成">
+         <description>
+            既存のDSL（Javaクラス）からダイアグラム（toadファイル）を生成します。
+         </description>
       </wizard>
    </extension>
    <extension
