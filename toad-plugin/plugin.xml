@@ -11,24 +11,28 @@
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
             class="jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.NewBatchWizard"
+            icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-batch"
             name="バッチダイアグラム">
       </wizard>
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
             class="jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.NewJobflowWizard"
+            icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-jobflow"
             name="ジョブフローダイアグラム">
       </wizard>
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
             class="jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.NewFlowpartWizard"
+            icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-flowpart"
             name="フローパートダイアグラム">
       </wizard>
       <wizard
             category="jp.hishidama.toadEditor.category.new-wizard"
             class="jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.ReverseWizard"
+            icon="icons/toad.gif"
             id="jp.hishidama.toadEditor.wizard.new-importDiagram"
             name="既存DSLクラスからダイアグラム生成">
       </wizard>
