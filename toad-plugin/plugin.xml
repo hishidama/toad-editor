@@ -3,6 +3,41 @@
 <plugin>
    <extension-point id="importerExporterPropertyExtension" name="Importer/Exporter property" schema="schema/importerExporterPropertyExtension.exsd"/>
    <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-batch">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-jobflow">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-flowpart">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-importDiagram">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-batch">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-jobflow">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-flowpart">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="jp.hishidama.toadEditor.wizard.new-importDiagram">
+         </newWizardShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         id="jp.hishidama.toadEditor.newWizard"
+         name="Asakusa Toad Editor New Wizard"
          point="org.eclipse.ui.newWizards">
       <category
             id="jp.hishidama.toadEditor.category.new-wizard"
