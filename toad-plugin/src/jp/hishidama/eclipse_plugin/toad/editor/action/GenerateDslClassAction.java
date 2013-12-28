@@ -7,9 +7,14 @@ import java.util.List;
 import jp.hishidama.eclipse_plugin.jdt.util.TypeUtil;
 import jp.hishidama.eclipse_plugin.toad.editor.ToadEditor;
 import jp.hishidama.eclipse_plugin.toad.editor.handler.GenerateDslClassHandler;
+import jp.hishidama.eclipse_plugin.toad.editor.handler.GenerateDslClassHandler.Target;
 import jp.hishidama.eclipse_plugin.toad.editor.handler.dslgen.OperatorClassAst;
 import jp.hishidama.eclipse_plugin.toad.editor.handler.dslgen.PorterClassGenerator;
 import jp.hishidama.eclipse_plugin.toad.internal.LogUtil;
+import jp.hishidama.eclipse_plugin.toad.model.AbstractNameModel;
+import jp.hishidama.eclipse_plugin.toad.model.diagram.Diagram;
+import jp.hishidama.eclipse_plugin.toad.model.diagram.DiagramEditPart;
+import jp.hishidama.eclipse_plugin.toad.model.node.ClassNameNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElementEditPart;
 import jp.hishidama.eclipse_plugin.toad.model.node.datafile.DataFileNode;
@@ -55,14 +60,14 @@ public class GenerateDslClassAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		List<NodeElement> list = getSelectedObjects();
+		List<AbstractNameModel> list = getSelectedObjects();
 		return !list.isEmpty();
 	}
 
 	@Override
-	protected List<NodeElement> getSelectedObjects() {
+	protected List<AbstractNameModel> getSelectedObjects() {
 		List<?> list = super.getSelectedObjects();
-		List<NodeElement> result = new ArrayList<NodeElement>(list.size());
+		List<AbstractNameModel> result = new ArrayList<AbstractNameModel>(list.size());
 		for (Object obj : list) {
 			if (obj instanceof NodeElementEditPart) {
 				NodeElementEditPart part = (NodeElementEditPart) obj;
@@ -75,6 +80,10 @@ public class GenerateDslClassAction extends SelectionAction {
 				} else if (model instanceof DataFileNode) {
 					result.add(model);
 				}
+			} else if (obj instanceof DiagramEditPart) {
+				DiagramEditPart part = (DiagramEditPart) obj;
+				Diagram model = part.getModel();
+				result.add(model);
 			}
 		}
 		return result;
@@ -84,12 +93,12 @@ public class GenerateDslClassAction extends SelectionAction {
 	public void run() {
 		Object result = null;
 
-		List<NodeElement> list = getSelectedObjects();
+		List<AbstractNameModel> list = getSelectedObjects();
 		if (!confirm(list)) {
 			return;
 		}
 
-		for (NodeElement node : list) {
+		for (AbstractNameModel node : list) {
 			try {
 				if (node instanceof OperatorNode) {
 					IMethod method = generateOperator((OperatorNode) node);
@@ -101,8 +110,13 @@ public class GenerateDslClassAction extends SelectionAction {
 					if (result == null) {
 						result = file;
 					}
+				} else if (node instanceof Diagram) {
+					IFile file = generateDslClass((Diagram) node);
+					if (result == null) {
+						result = file;
+					}
 				} else {
-					throw new IllegalStateException("node=" + node);
+					throw new UnsupportedOperationException("node=" + node);
 				}
 			} catch (Exception e) {
 				IStatus status = LogUtil.logError("DSLクラス生成時に例外発生 node=" + node, e);
@@ -128,20 +142,20 @@ public class GenerateDslClassAction extends SelectionAction {
 		}
 	}
 
-	private boolean confirm(List<NodeElement> list) {
+	private boolean confirm(List<AbstractNameModel> list) {
 		StringBuilder sb = new StringBuilder(256);
 		sb.append("以下のJavaソースを生成します。よろしいですか？\n");
-		for (NodeElement node : list) {
+		for (AbstractNameModel model : list) {
 			sb.append("\n");
-			if (node instanceof OperatorNode) {
-				OperatorNode operator = (OperatorNode) node;
+			if (model instanceof OperatorNode) {
+				OperatorNode operator = (OperatorNode) model;
 				sb.append(operator.getClassName());
 				sb.append("#");
 				sb.append(operator.getMethodName());
 				sb.append("()");
-			} else if (node instanceof DataFileNode) {
-				DataFileNode porter = (DataFileNode) node;
-				sb.append(porter.getClassName());
+			} else {
+				ClassNameNode node = (ClassNameNode) model;
+				sb.append(node.getClassName());
 			}
 		}
 
@@ -149,7 +163,7 @@ public class GenerateDslClassAction extends SelectionAction {
 		return r;
 	}
 
-	private IMethod generateOperator(OperatorNode operator) {
+	private IMethod generateOperator(OperatorNode operator) throws CoreException {
 		List<IStatus> result = new ArrayList<IStatus>();
 		operator.validate(ValidateType.GENERATE, false, result);
 		String message = ToadValidator.getErrorMessage(result);
@@ -170,7 +184,7 @@ public class GenerateDslClassAction extends SelectionAction {
 		return modifyMethod(type, operator, methodName);
 	}
 
-	private void createNewOperatorFile(String className) {
+	private void createNewOperatorFile(String className) throws CoreException {
 		IFile file = ToadFileUtil.getJavaFile(project, className);
 		try {
 			FileUtil.createFolder(project, file);
@@ -184,11 +198,7 @@ public class GenerateDslClassAction extends SelectionAction {
 		sb.append("public abstract class ");
 		sb.append(StringUtil.getSimpleName(className));
 		sb.append(" {\n}\n");
-		try {
-			FileUtil.save(file, sb.toString());
-		} catch (CoreException e) {
-			throw new RuntimeException(e);
-		}
+		FileUtil.save(file, sb.toString());
 	}
 
 	private IMethod modifyMethod(IType type, OperatorNode operator, String methodName) {
@@ -231,5 +241,22 @@ public class GenerateDslClassAction extends SelectionAction {
 		handler.generateDslClass(file, generator);
 
 		return file;
+	}
+
+	private IFile generateDslClass(Diagram diagram) throws CoreException {
+		List<IStatus> result = new ArrayList<IStatus>();
+		diagram.validate(ValidateType.IMPLEMENTS, false, result);
+		String message = ToadValidator.getErrorMessage(result);
+		if (message != null) {
+			MessageDialog.openError(null, "DSL (Java class) generate error", message);
+			return null;
+		}
+
+		GenerateDslClassHandler handler = new GenerateDslClassHandler();
+		Target target = handler.generateDslClass(project, diagram);
+		if (target == null) {
+			return null;
+		}
+		return target.file;
 	}
 }

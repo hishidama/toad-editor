@@ -116,7 +116,7 @@ public class GenerateDslClassHandler extends AbstractHandler {
 		return result;
 	}
 
-	private static class Target {
+	public static class Target {
 		public IFile file;
 		public String className;
 	}
