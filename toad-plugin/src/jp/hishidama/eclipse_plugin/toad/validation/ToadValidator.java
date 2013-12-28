@@ -171,9 +171,9 @@ public class ToadValidator {
 
 	public static String getErrorMessage(List<IStatus> result) {
 		StringBuilder sb = new StringBuilder(512);
-		for (IStatus status : result) {
-			if (!status.isOK()) {
-				sb.append(status.getMessage());
+		for (IStatus s : result) {
+			if (s != null && !s.isOK()) {
+				sb.append(s.getMessage());
 				sb.append("\n");
 			}
 		}

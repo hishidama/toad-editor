@@ -16,6 +16,7 @@ import jp.hishidama.eclipse_plugin.toad.editor.action.OpenDiagramAction;
 import jp.hishidama.eclipse_plugin.toad.editor.action.OpenDmdlAction;
 import jp.hishidama.eclipse_plugin.toad.editor.action.PasteAction;
 import jp.hishidama.eclipse_plugin.toad.editor.action.SiblingDataModelAction;
+import jp.hishidama.eclipse_plugin.toad.editor.action.ValidateAction;
 import jp.hishidama.eclipse_plugin.toad.editor.drop.ToadFileDropTargetListener;
 import jp.hishidama.eclipse_plugin.toad.editor.drop.ToadMethodDropTargetListener;
 import jp.hishidama.eclipse_plugin.toad.editor.menu.ToadContextMenuProvider;
@@ -27,7 +28,6 @@ import jp.hishidama.eclipse_plugin.toad.model.diagram.DiagramEditPart;
 import jp.hishidama.eclipse_plugin.toad.model.gson.ToadGson;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.validation.ToadMarker;
-import jp.hishidama.eclipse_plugin.toad.validation.ToadValidateAction;
 import jp.hishidama.eclipse_plugin.toad.validation.ValidateType;
 
 import org.eclipse.core.resources.IFile;
@@ -205,7 +205,7 @@ public class ToadEditor extends GraphicalEditorWithFlyoutPalette implements ITab
 			getSelectionActions().add(action.getId());
 		}
 		for (ValidateType type : ValidateType.values()) {
-			IAction action = new ToadValidateAction(this, type);
+			IAction action = new ValidateAction(this, type);
 			registry.registerAction(action);
 			getSelectionActions().add(action.getId());
 		}

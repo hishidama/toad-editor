@@ -9,10 +9,10 @@ import jp.hishidama.eclipse_plugin.toad.editor.action.OpenClassAction;
 import jp.hishidama.eclipse_plugin.toad.editor.action.OpenDiagramAction;
 import jp.hishidama.eclipse_plugin.toad.editor.action.OpenDmdlAction;
 import jp.hishidama.eclipse_plugin.toad.editor.action.SiblingDataModelAction;
+import jp.hishidama.eclipse_plugin.toad.editor.action.ValidateAction;
 import jp.hishidama.eclipse_plugin.toad.model.connection.Connection;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.JobPort;
-import jp.hishidama.eclipse_plugin.toad.validation.ToadValidateAction;
 import jp.hishidama.eclipse_plugin.toad.validation.ValidateType;
 
 import org.eclipse.gef.ContextMenuProvider;
@@ -80,7 +80,7 @@ public class ToadContextMenuProvider extends ContextMenuProvider {
 
 		MenuManager validate = new MenuManager("Validate");
 		for (ValidateType type : ValidateType.values()) {
-			validate.add(registry.getAction(ToadValidateAction.getId(type)));
+			validate.add(registry.getAction(ValidateAction.getId(type)));
 		}
 		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, validate);
 

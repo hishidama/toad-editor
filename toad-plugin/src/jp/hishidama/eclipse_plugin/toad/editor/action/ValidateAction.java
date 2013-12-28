@@ -1,5 +1,6 @@
-package jp.hishidama.eclipse_plugin.toad.validation;
+package jp.hishidama.eclipse_plugin.toad.editor.action;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,13 +13,18 @@ import jp.hishidama.eclipse_plugin.toad.model.AbstractModel;
 import jp.hishidama.eclipse_plugin.toad.model.connection.Connection;
 import jp.hishidama.eclipse_plugin.toad.model.diagram.DiagramEditPart;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
+import jp.hishidama.eclipse_plugin.toad.validation.ToadMarker;
+import jp.hishidama.eclipse_plugin.toad.validation.ValidateType;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 
-public class ToadValidateAction extends SelectionAction {
+public class ValidateAction extends SelectionAction {
 
 	public static String getId(ValidateType type) {
 		return "TOAD_VALIDATE." + type.name();
@@ -26,7 +32,7 @@ public class ToadValidateAction extends SelectionAction {
 
 	private ValidateType type;
 
-	public ToadValidateAction(ToadEditor editor, ValidateType type) {
+	public ValidateAction(ToadEditor editor, ValidateType type) {
 		super(editor);
 		this.type = type;
 		setId(getId(type));
@@ -53,7 +59,21 @@ public class ToadValidateAction extends SelectionAction {
 
 		IFile file = getEditor().getFile();
 		deleteMarkers(file, idSet);
-		validate(file, list);
+		int count = validate(file, list);
+		if (count == 0) {
+			MessageDialog.openInformation(null, "Validate result", "エラーはありませんでした。");
+		} else {
+			String ID = "org.eclipse.ui.views.ProblemView";
+			IWorkbenchPage page = getEditor().getSite().getWorkbenchWindow().getActivePage();
+			try {
+				page.showView(ID, null, IWorkbenchPage.VIEW_VISIBLE);
+			} catch (PartInitException e) {
+				page.findView(ID);
+			}
+
+			String message = MessageFormat.format("{0}個のエラーまたは警告が見つかりました。\n詳細は「問題ビュー」で確認して下さい。", count);
+			MessageDialog.openWarning(null, "Validate result", message);
+		}
 	}
 
 	private Set<AbstractModel> getTargetObjects(Set<String> idSet) {
@@ -111,15 +131,18 @@ public class ToadValidateAction extends SelectionAction {
 		}
 	}
 
-	private void validate(IFile file, Set<AbstractModel> list) {
+	private int validate(IFile file, Set<AbstractModel> list) {
+		int count = 0;
 		for (AbstractModel model : list) {
 			List<IStatus> results = new ArrayList<IStatus>();
 			model.validate(type, false, results);
 			for (IStatus s : results) {
 				if (s != null && !s.isOK()) {
 					ToadMarker.createMarker(file, model, s);
+					count++;
 				}
 			}
 		}
+		return count;
 	}
 }
