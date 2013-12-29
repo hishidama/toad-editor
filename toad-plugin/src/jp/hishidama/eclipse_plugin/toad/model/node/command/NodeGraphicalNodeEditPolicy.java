@@ -12,13 +12,24 @@ import jp.hishidama.eclipse_plugin.toad.view.SiblingDataModelTreeElement;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.eclipse_plugin.util.ToadCommandUtil;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
 public class NodeGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
+
+	public static final String DROP_TARGET_EDITPART = "drop_target_editPart";
+	private RectangleFigure feedbackFigure;
+	private NodeElementEditPart nowTarget;
 
 	@Override
 	protected Command getConnectionCreateCommand(CreateConnectionRequest request) {
@@ -67,7 +78,7 @@ public class NodeGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
 		return transmitDataModel(command);
 	}
 
-	private Command transmitDataModel(CreateConnectionCommand command) {
+	public static Command transmitDataModel(CreateConnectionCommand command) {
 		NodeElement source = command.getSource();
 		if (!(source instanceof HasDataModelNode)) {
 			return command;
@@ -98,7 +109,7 @@ public class NodeGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
 		return compound.unwrap();
 	}
 
-	private void collectCommand(CompoundCommand compound, List<SiblingDataModelTreeElement> list, HasDataModelNode from) {
+	private static void collectCommand(CompoundCommand compound, List<SiblingDataModelTreeElement> list, HasDataModelNode from) {
 		for (SiblingDataModelTreeElement c : list) {
 			HasDataModelNode to = c.getDataModelNode();
 			if (StringUtil.isEmpty(to.getModelName())) {
@@ -109,6 +120,74 @@ public class NodeGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
 
 				collectCommand(compound, c.getChildren(), from);
 			}
+		}
+	}
+
+	@Override
+	public void eraseSourceFeedback(Request request) {
+		feedback(null);
+		super.eraseSourceFeedback(request);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void showSourceFeedback(Request request) {
+		if (REQ_MOVE.equals(request.getType())) {
+			ChangeBoundsRequest crequest = (ChangeBoundsRequest) request;
+			if (crequest.getEditParts().size() == 1 && isFeedbackSource()) {
+				Point mouse = crequest.getLocation();
+				NodeElementEditPart target = getFeedbackTarget(mouse);
+				feedback(target);
+				request.getExtendedData().put(DROP_TARGET_EDITPART, target);
+			}
+		}
+		super.showSourceFeedback(request);
+	}
+
+	private boolean isFeedbackSource() {
+		EditPart editPart = getHost();
+		if (editPart instanceof NodeElementEditPart) {
+			NodeElementEditPart part = (NodeElementEditPart) editPart;
+			NodeElement node = part.getModel();
+			return node.canStartConnect();
+		}
+		return false;
+	}
+
+	private NodeElementEditPart getFeedbackTarget(Point mouse) {
+		NodeElementEditPart part = (NodeElementEditPart) getHost();
+		GraphicalEditPart diagramPart = part.getParent();
+		EditPart targetEditPart = diagramPart.getViewer().findObjectAt(mouse);
+		if (targetEditPart == part) {
+			return null;
+		}
+		if (targetEditPart instanceof NodeElementEditPart) {
+			NodeElementEditPart target = (NodeElementEditPart) targetEditPart;
+			NodeElement node = target.getModel();
+			Connection connection = new Connection(); // dummy
+			if (node.canConnectFrom(connection, part.getModel())) {
+				return target;
+			}
+		}
+		return null;
+	}
+
+	private void feedback(NodeElementEditPart target) {
+		if (target == null || nowTarget != target) {
+			if (feedbackFigure != null) {
+				getFeedbackLayer().remove(feedbackFigure);
+				feedbackFigure = null;
+				nowTarget = null;
+			}
+		}
+
+		if (target != null && feedbackFigure == null) {
+			feedbackFigure = new RectangleFigure();
+			feedbackFigure.setBackgroundColor(ColorConstants.blue);
+			feedbackFigure.setFillXOR(true);
+			feedbackFigure.setBounds(target.getFigure().getBounds());
+			getFeedbackLayer().add(feedbackFigure);
+			nowTarget = target;
 		}
 	}
 }

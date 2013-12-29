@@ -4,11 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jp.hishidama.eclipse_plugin.toad.model.connection.Connection;
+import jp.hishidama.eclipse_plugin.toad.model.connection.command.CreateConnectionCommand;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElementEditPart;
 import jp.hishidama.eclipse_plugin.toad.model.node.RectangleNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.command.CreateNodeCommand;
 import jp.hishidama.eclipse_plugin.toad.model.node.command.MoveNodeCommand;
+import jp.hishidama.eclipse_plugin.toad.model.node.command.NodeGraphicalNodeEditPolicy;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.BasePort;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.BasePortEditPart;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.command.MovePortCommand;
@@ -34,6 +37,16 @@ public class DiagramLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+		NodeElementEditPart part = (NodeElementEditPart) request.getExtendedData().get(
+				NodeGraphicalNodeEditPolicy.DROP_TARGET_EDITPART);
+		if (part == null) {
+			return createMoveNodeCommand(child, constraint);
+		} else {
+			return createConnectionCommand(child, part);
+		}
+	}
+
+	private Command createMoveNodeCommand(EditPart child, Object constraint) {
 		NodeElement node = (NodeElement) child.getModel();
 
 		{ // 親ノードが選択範囲に含まれている場合は何もしない
@@ -66,5 +79,16 @@ public class DiagramLayoutEditPolicy extends XYLayoutEditPolicy {
 			return new MovePortCommand(port, cx, cy);
 		}
 		return new MoveNodeCommand((RectangleNode) node, rect.x, rect.y, rect.width, rect.height);
+	}
+
+	private Command createConnectionCommand(EditPart child, NodeElementEditPart part) {
+		NodeElement source = (NodeElement) child.getModel();
+		NodeElement target = part.getModel();
+
+		Connection connection = new Connection();
+		CreateConnectionCommand command = new CreateConnectionCommand(connection);
+		command.setSource(source);
+		command.setTarget(target);
+		return NodeGraphicalNodeEditPolicy.transmitDataModel(command);
 	}
 }
