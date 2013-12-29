@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
@@ -56,6 +57,8 @@ import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
@@ -282,6 +285,17 @@ public class ToadEditor extends GraphicalEditorWithFlyoutPalette implements ITab
 		Diagram diagram = getDiagram();
 		IProject project = getFile().getProject();
 		paletteRoot.addSecond(diagram, project);
+	}
+
+	@Override
+	protected FlyoutPreferences getPalettePreferences() {
+		FlyoutPreferences pref = super.getPalettePreferences();
+		if (pref.getPaletteWidth() <= 0) {
+			pref.setDockLocation(PositionConstants.EAST);
+			pref.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
+			pref.setPaletteWidth(160);
+		}
+		return pref;
 	}
 
 	public Diagram getDiagram() {
