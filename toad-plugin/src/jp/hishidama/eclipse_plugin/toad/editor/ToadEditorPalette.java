@@ -15,6 +15,7 @@ import org.eclipse.gef.palette.ConnectionCreationToolEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.palette.PaletteSeparator;
 import org.eclipse.gef.palette.PanningSelectionToolEntry;
 import org.eclipse.gef.requests.SimpleFactory;
 
@@ -106,6 +107,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out:出力");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@Convert");
 			factory.setGroup("データ操作");
@@ -142,6 +144,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out:出力");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@Extract");
 			factory.setGroup("データ操作");
@@ -191,6 +194,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("updated:更新後", "missed:マスター無し");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@CoGroup");
 			factory.setGroup("結合");
@@ -200,6 +204,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out1:出力1", "out2:出力2");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@Split");
 			factory.setGroup("結合");
@@ -231,6 +236,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out:集計結果");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			UserOperatorFactory factory = new UserOperatorFactory(editor, "@GroupSort");
 			factory.setGroup("集計");
@@ -253,6 +259,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out:出力");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			CoreOperatorFactory factory = new CoreOperatorFactory(editor, "checkpoint");
 			factory.setGroup("特殊");
@@ -271,6 +278,7 @@ public class ToadEditorPalette extends PaletteRoot {
 			factory.addOut("out:出力");
 			add(drawer, factory);
 		}
+		drawer.add(new PaletteSeparator());
 		{
 			CoreOperatorFactory factory = new CoreOperatorFactory(editor, "empty");
 			factory.setGroup("特殊");
@@ -290,7 +298,7 @@ public class ToadEditorPalette extends PaletteRoot {
 
 	private void add(PaletteDrawer drawer, UserOperatorFactory factory) {
 		String label = factory.getDescription();
-		String desc = String.format("%s %s\n%s", factory.getGroup(), factory.getName(), factory.getMemo());
+		String desc = String.format("%s\n%s", factory.getName(), factory.getMemo());
 		drawer.add(new CombinedTemplateCreationEntry(label, desc, factory, null, null));
 	}
 }
