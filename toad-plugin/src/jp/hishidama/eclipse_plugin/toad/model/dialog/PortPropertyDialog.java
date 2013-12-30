@@ -6,10 +6,14 @@ import java.util.List;
 import jp.hishidama.eclipse_plugin.toad.editor.ToadEditor;
 import jp.hishidama.eclipse_plugin.toad.model.dialog.section.PropertySection;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
+import jp.hishidama.eclipse_plugin.toad.model.node.operator.GuessDataModelType;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.OperatorDelegate;
+import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserMasterJoin;
+import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserSummarize;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.BasePort;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
+import jp.hishidama.xtext.dmdl_editor.ui.wizard.page.DataModelType;
 
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -50,6 +54,18 @@ public class PortPropertyDialog extends PropertyDialog {
 		createRoleSection(composite);
 		createBaseSection(composite);
 		createModelNameSection(composite, !directEdit);
+
+		if (delegate instanceof UserSummarize) {
+			if (port.isOut()) {
+				dataModelSection
+						.setDataModelType(new GuessDataModelType(DataModelType.SUMMARIZED, port.getModelName()));
+			}
+		}
+		if (delegate instanceof UserMasterJoin) {
+			if (port.isOut() && "joined".equals(port.getRole())) {
+				dataModelSection.setDataModelType(new GuessDataModelType(DataModelType.JOINED, port.getModelName()));
+			}
+		}
 	}
 
 	private void createInOutSection(Composite composite) {

@@ -49,6 +49,7 @@ public class DataModelSection extends PropertySection {
 	private Text modelDescription;
 	private Table modelTable;
 	private Button editButton;
+	private GuessDataModelType dataModelType;
 
 	public DataModelSection(PropertyDialog dialog, HasDataModelNode model, boolean enableOpen) {
 		super(dialog);
@@ -164,8 +165,16 @@ public class DataModelSection extends PropertySection {
 	}
 
 	private GuessDataModelType getGuessModelType() {
+		if (dataModelType != null) {
+			return dataModelType;
+		}
+
 		SiblingDataModelTreeElement root = getSiblingDataModels();
 		return root.guessDataModelType();
+	}
+
+	public void setDataModelType(GuessDataModelType dataModelType) {
+		this.dataModelType = dataModelType;
 	}
 
 	private DataModelType getModelType(GuessDataModelType type) {
