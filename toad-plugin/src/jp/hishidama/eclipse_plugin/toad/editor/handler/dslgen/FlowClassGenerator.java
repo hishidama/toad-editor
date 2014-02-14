@@ -48,6 +48,26 @@ public abstract class FlowClassGenerator<F extends FrameNode> extends DiagramDsl
 	}
 
 	@Override
+	protected void appendClassJavadoc(StringBuilder sb) {
+		sb.append("/**\n");
+		sb.append(" * ");
+		sb.append(frame.getDescription());
+		sb.append("\n");
+
+		String memo = frame.getMemo();
+		if (StringUtil.nonEmpty(memo)) {
+			String[] ss = memo.split("[\r\n]+");
+			for (String s : ss) {
+				sb.append(" * ");
+				sb.append(s);
+				sb.append("\n");
+			}
+		}
+
+		sb.append(" */\n");
+	}
+
+	@Override
 	protected void appendClass(StringBuilder sb) {
 		sb.append("public class ");
 		sb.append(StringUtil.getSimpleName(className));

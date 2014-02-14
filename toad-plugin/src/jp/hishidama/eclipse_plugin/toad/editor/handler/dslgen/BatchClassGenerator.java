@@ -34,6 +34,26 @@ public class BatchClassGenerator extends DiagramDslClassGenerator {
 	}
 
 	@Override
+	protected void appendClassJavadoc(StringBuilder sb) {
+		sb.append("/**\n");
+		sb.append(" * ");
+		sb.append(diagram.getDescription());
+		sb.append("\n");
+
+		String memo = diagram.getMemo();
+		if (StringUtil.nonEmpty(memo)) {
+			String[] ss = memo.split("[\r\n]+");
+			for (String s : ss) {
+				sb.append(" * ");
+				sb.append(s);
+				sb.append("\n");
+			}
+		}
+
+		sb.append(" */\n");
+	}
+
+	@Override
 	protected void appendClassAnnotation(StringBuilder sb) {
 		sb.append("@Batch(name = \"");
 		sb.append(diagramName);

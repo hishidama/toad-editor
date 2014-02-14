@@ -23,23 +23,7 @@ public class PorterClassGenerator extends DslClassGenerator implements ClassGene
 	}
 
 	@Override
-	protected void appendClassAnnotation(StringBuilder sb) {
-	}
-
-	@Override
-	protected void appendClass(StringBuilder sb) {
-		appendJavadoc(sb);
-
-		String fileType = node.getFileType();
-		ToadImporterExporterProperty extension = ImporterExporterExtensionUtil.getExtension(fileType);
-		if (extension == null) {
-			throw new UnsupportedOperationException("fileType=" + fileType);
-		}
-
-		extension.generateClass(this, node, sb);
-	}
-
-	private void appendJavadoc(StringBuilder sb) {
+	protected void appendClassJavadoc(StringBuilder sb) {
 		sb.append("/**\n");
 		sb.append(" * ");
 		sb.append(node.getDescription());
@@ -56,6 +40,21 @@ public class PorterClassGenerator extends DslClassGenerator implements ClassGene
 		}
 
 		sb.append(" */\n");
+	}
+
+	@Override
+	protected void appendClassAnnotation(StringBuilder sb) {
+	}
+
+	@Override
+	protected void appendClass(StringBuilder sb) {
+		String fileType = node.getFileType();
+		ToadImporterExporterProperty extension = ImporterExporterExtensionUtil.getExtension(fileType);
+		if (extension == null) {
+			throw new UnsupportedOperationException("fileType=" + fileType);
+		}
+
+		extension.generateClass(this, node, sb);
 	}
 
 	@Override

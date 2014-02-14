@@ -37,6 +37,7 @@ public abstract class DslClassGenerator {
 		StringBuilder sb = new StringBuilder(body.length() + 512);
 		appendPackage(sb);
 		appendImport(sb);
+		appendClassJavadoc(sb);
 		appendClassAnnotation(sb);
 		sb.append(body);
 		return sb.toString();
@@ -68,6 +69,8 @@ public abstract class DslClassGenerator {
 		}
 		sb.append("\n");
 	}
+
+	protected abstract void appendClassJavadoc(StringBuilder sb);
 
 	protected abstract void appendClassAnnotation(StringBuilder sb);
 
