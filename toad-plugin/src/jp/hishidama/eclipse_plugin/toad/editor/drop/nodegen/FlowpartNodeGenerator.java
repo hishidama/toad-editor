@@ -25,6 +25,8 @@ public abstract class FlowpartNodeGenerator extends NodeGenerator {
 		OperatorNode node = new OperatorNode();
 		node.setId(id);
 		node.setType("FlowPart");
+		node.setDescription(flowpart.getJavadoc().getTitle());
+		node.setMemo(flowpart.getJavadoc().getMemo());
 		String className = flowpart.getClassName();
 		node.setClassName(className);
 		node.setMethodName("create");
