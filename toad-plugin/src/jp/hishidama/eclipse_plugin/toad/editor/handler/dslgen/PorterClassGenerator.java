@@ -40,8 +40,8 @@ public class PorterClassGenerator extends DslClassGenerator implements ClassGene
 	}
 
 	private void appendJavadoc(StringBuilder sb) {
-		sb.append("\t/**\n");
-		sb.append("\t * ");
+		sb.append("/**\n");
+		sb.append(" * ");
 		sb.append(node.getDescription());
 		sb.append("\n");
 
@@ -49,13 +49,13 @@ public class PorterClassGenerator extends DslClassGenerator implements ClassGene
 		if (StringUtil.nonEmpty(memo)) {
 			String[] ss = memo.split("[\r\n]+");
 			for (String s : ss) {
-				sb.append("\t * ");
+				sb.append(" * ");
 				sb.append(s);
 				sb.append("\n");
 			}
 		}
 
-		sb.append("\t */\n");
+		sb.append(" */\n");
 	}
 
 	@Override
