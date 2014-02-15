@@ -500,6 +500,12 @@
             class="jp.hishidama.eclipse_plugin.toad.internal.extension.DirectioCsvExporterProperty">
       </classpath>
       <classpath
+            class="jp.hishidama.eclipse_plugin.toad.internal.extension.DirectioTsvImporterProperty">
+      </classpath>
+      <classpath
+            class="jp.hishidama.eclipse_plugin.toad.internal.extension.DirectioTsvExporterProperty">
+      </classpath>
+      <classpath
             class="jp.hishidama.eclipse_plugin.toad.internal.extension.WindgateCsvImporterProperty">
       </classpath>
       <classpath

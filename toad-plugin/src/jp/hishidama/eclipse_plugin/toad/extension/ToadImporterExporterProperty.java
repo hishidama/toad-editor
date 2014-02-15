@@ -54,6 +54,10 @@ public abstract class ToadImporterExporterProperty {
 		return TypeUtil.isExtends(type, name);
 	}
 
+	protected boolean isExtends(IType type, String prefix, String suffix) {
+		return TypeUtil.isExtends(type, prefix, suffix);
+	}
+
 	protected boolean isImplements(IType type, String name) {
 		return TypeUtil.isImplements(type, name);
 	}
