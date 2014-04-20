@@ -12,7 +12,7 @@ import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
 import jp.hishidama.eclipse_plugin.toad.model.property.attribute.HasAttributeNode;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
-import jp.hishidama.xtext.dmdl_editor.util.DMDLStringUtil;
+import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
 
 import org.eclipse.core.resources.IProject;
 
@@ -91,7 +91,7 @@ public class OperatorMethodGenerator {
 
 		@Override
 		public String resolvedType(TypeResolver resolver) {
-			String type = DMDLStringUtil.getModelClass(project, name);
+			String type = ModelUiUtil.getModelClassName(project, name);
 			if (type == null) {
 				type = name;
 			}

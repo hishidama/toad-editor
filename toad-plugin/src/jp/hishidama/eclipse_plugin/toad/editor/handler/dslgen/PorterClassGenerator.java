@@ -5,7 +5,7 @@ import jp.hishidama.eclipse_plugin.toad.extension.ToadImporterExporterProperty;
 import jp.hishidama.eclipse_plugin.toad.internal.extension.ImporterExporterExtensionUtil;
 import jp.hishidama.eclipse_plugin.toad.model.node.datafile.DataFileNode;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
-import jp.hishidama.xtext.dmdl_editor.util.DMDLStringUtil;
+import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
 
 import org.eclipse.core.resources.IProject;
 
@@ -62,7 +62,7 @@ public class PorterClassGenerator extends DslClassGenerator implements ClassGene
 		if (StringUtil.isEmpty(modelName)) {
 			return "_UndefinedModel_";
 		}
-		String className = DMDLStringUtil.getModelClass(project, modelName);
+		String className = ModelUiUtil.getModelClassName(project, modelName);
 		if (className == null) {
 			return "_UndefinedPackage_" + modelName + "_";
 		}

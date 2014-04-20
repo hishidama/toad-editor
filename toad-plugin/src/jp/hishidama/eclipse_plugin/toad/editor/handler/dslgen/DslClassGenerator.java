@@ -11,7 +11,7 @@ import java.util.Set;
 
 import jp.hishidama.eclipse_plugin.toad.model.property.datamodel.HasDataModelNode;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
-import jp.hishidama.xtext.dmdl_editor.util.DMDLStringUtil;
+import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
 
 import org.eclipse.core.resources.IProject;
 
@@ -120,6 +120,6 @@ public abstract class DslClassGenerator {
 
 	protected String getModelClassName(HasDataModelNode node) {
 		String modelName = node.getModelName();
-		return DMDLStringUtil.getModelClass(project, modelName);
+		return ModelUiUtil.getModelClassName(project, modelName);
 	}
 }
