@@ -15,7 +15,7 @@ import jp.hishidama.eclipse_plugin.toad.model.frame.FrameNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.OpeParameter;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
-import jp.hishidama.eclipse_plugin.util.ToadJavaUtil;
+import jp.hishidama.eclipse_plugin.util.JdtUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,7 +32,7 @@ public class FlowpartDiagramGenerator extends FlowDiagramGenerator {
 	}
 
 	public static FlowPartClass findFlowpart(IFile file) {
-		ICompilationUnit unit = ToadJavaUtil.getJavaUnit(file);
+		ICompilationUnit unit = JdtUtil.getJavaUnit(file);
 		if (unit == null) {
 			return null;
 		}

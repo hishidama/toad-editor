@@ -11,7 +11,7 @@ import jp.hishidama.eclipse_plugin.toad.model.frame.FrameNode;
 import jp.hishidama.eclipse_plugin.toad.model.frame.JobFrameNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.datafile.DataFileNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.JobPort;
-import jp.hishidama.eclipse_plugin.util.ToadJavaUtil;
+import jp.hishidama.eclipse_plugin.util.JdtUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -26,7 +26,7 @@ public class JobDiagramGenerator extends FlowDiagramGenerator {
 	}
 
 	public static JobFlowClass findJobflow(IFile file) {
-		ICompilationUnit unit = ToadJavaUtil.getJavaUnit(file);
+		ICompilationUnit unit = JdtUtil.getJavaUnit(file);
 		if (unit == null) {
 			return null;
 		}

@@ -18,7 +18,7 @@ import jp.hishidama.eclipse_plugin.toad.model.diagram.DiagramType;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.model.node.jobflow.JobNode;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
-import jp.hishidama.eclipse_plugin.util.ToadJavaUtil;
+import jp.hishidama.eclipse_plugin.util.JdtUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -29,7 +29,7 @@ import org.eclipse.jdt.core.JavaModelException;
 public class BatchDiagramGenerator extends DiagramFileGenerator {
 
 	public static BatchClass findBatch(IFile file) {
-		ICompilationUnit unit = ToadJavaUtil.getJavaUnit(file);
+		ICompilationUnit unit = JdtUtil.getJavaUnit(file);
 		if (unit == null) {
 			return null;
 		}
