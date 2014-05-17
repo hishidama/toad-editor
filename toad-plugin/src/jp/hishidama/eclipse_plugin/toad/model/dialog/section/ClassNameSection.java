@@ -158,7 +158,7 @@ public class ClassNameSection extends PropertySection {
 			return;
 		}
 
-		String name = d.getSelectedClass();
+		String name = d.getSelectedClassName();
 		className.setText(nonNull(name));
 	}
 

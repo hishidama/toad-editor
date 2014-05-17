@@ -92,7 +92,7 @@ public class EnumNameSection extends PropertySection {
 			return;
 		}
 
-		String name = d.getSelectedClass();
+		String name = d.getSelectedClassName();
 		enumName.setText(nonNull(name));
 	}
 }
