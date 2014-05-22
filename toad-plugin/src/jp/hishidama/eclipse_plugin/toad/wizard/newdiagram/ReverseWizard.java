@@ -1,19 +1,22 @@
 package jp.hishidama.eclipse_plugin.toad.wizard.newdiagram;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import jp.hishidama.eclipse_plugin.toad.Activator;
+import jp.hishidama.eclipse_plugin.toad.internal.LogUtil;
 import jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.page.FlowpartParameterPage;
 import jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.page.SelectClassPage;
 import jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.task.GenerateDiagramTask;
+import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.eclipse_plugin.util.ToadFileUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -89,10 +92,16 @@ public class ReverseWizard extends Wizard implements INewWizard {
 		GenerateDiagramTask task = new GenerateDiagramTask(list, values);
 		try {
 			getContainer().run(true, true, task);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-			return false;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
+			IStatus status = LogUtil.logError("ReverseWizard error.", e);
+			String message = null;
+			for (Throwable cause = e; cause != null; cause = cause.getCause()) {
+				message = cause.getMessage();
+				if (StringUtil.nonEmpty(message)) {
+					break;
+				}
+			}
+			ErrorDialog.openError(getShell(), "ReverseWizard error", message, status);
 			return false;
 		}
 
