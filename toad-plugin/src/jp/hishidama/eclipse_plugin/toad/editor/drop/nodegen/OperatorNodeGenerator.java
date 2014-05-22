@@ -182,10 +182,10 @@ public abstract class OperatorNodeGenerator extends NodeGenerator {
 
 	private void ioFold(OperatorNode node, OperatorMethod operator, List<OpePort> inList, List<OpePort> outList,
 			List<Attribute> attributeList) {
-		createSimplePort(true, node, operator, 0, inList, "", "in");
+		createSimplePort(true, node, operator, 0, inList, "", "in", "in");
 
 		String out = getNameFromAnnotation(attributeList, UserFold.CLASS, UserFold.OUTPUT_PORT, "out");
-		createSimplePort(false, node, operator, 1, outList, "", out);
+		createSimplePort(false, node, operator, 1, outList, "", out, out);
 
 		createValueParameters(node, operator, 2);
 	}
@@ -278,6 +278,11 @@ public abstract class OperatorNodeGenerator extends NodeGenerator {
 
 	private String createSimplePort(boolean in, OperatorNode node, OperatorMethod operator, int index,
 			List<OpePort> list, String role, String defaultName) {
+		return createSimplePort(in, node, operator, index, list, role, defaultName, null);
+	}
+
+	private String createSimplePort(boolean in, OperatorNode node, OperatorMethod operator, int index,
+			List<OpePort> list, String role, String defaultName, String forceName) {
 		String name, className;
 		Map<String, Value> attributes;
 		List<Parameter> params = operator.getParameters();
@@ -290,6 +295,9 @@ public abstract class OperatorNodeGenerator extends NodeGenerator {
 			name = defaultName;
 			className = null;
 			attributes = new LinkedHashMap<String, Value>();
+		}
+		if (forceName != null) {
+			name = forceName;
 		}
 
 		List<Attribute> annotation = node.getDefaultPortAnnotation();
