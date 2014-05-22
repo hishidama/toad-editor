@@ -394,8 +394,9 @@ public abstract class FlowDiagramGenerator extends DiagramFileGenerator {
 				return id;
 			}
 		}
-		throw new IllegalStateException(MessageFormat.format("not found port. class={0}#{1}, portName={2}({3})",
-				className, methodName, name, in ? "in" : "out"));
+		throw new IllegalStateException(MessageFormat.format(
+				"not found port. class={0}#{1}, portName={2}({3}), list={4}", className, methodName, name, in ? "in"
+						: "out", list));
 	}
 
 	@SuppressWarnings("unchecked")

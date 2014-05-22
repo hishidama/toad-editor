@@ -22,6 +22,7 @@ import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserMaster
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserSummarize;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserUpdate;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
+import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.eclipse_plugin.util.ToadLayoutUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -131,7 +132,7 @@ public abstract class OperatorNodeGenerator extends NodeGenerator {
 
 				for (IField field : type.getFields()) {
 					if (field.isEnumConstant()) {
-						String name = field.getElementName().toLowerCase();
+						String name = StringUtil.toLowerCamelCase(field.getElementName().toLowerCase());
 						createOpePort(false, outList, "", name, modelClassName, null);
 					}
 				}
