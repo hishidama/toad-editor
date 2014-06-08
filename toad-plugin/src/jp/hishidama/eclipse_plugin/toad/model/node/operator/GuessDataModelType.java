@@ -1,7 +1,7 @@
 package jp.hishidama.eclipse_plugin.toad.model.node.operator;
 
+import jp.hishidama.eclipse_plugin.asakusafw_wrapper.dmdl.DataModelType;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
-import jp.hishidama.xtext.dmdl_editor.ui.wizard.page.DataModelType;
 
 public class GuessDataModelType {
 

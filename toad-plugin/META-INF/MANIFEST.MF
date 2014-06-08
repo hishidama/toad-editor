@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.core.runtime,
  jp.hishidama.eclipse_plugin.utility;bundle-version="0.0.1",
  org.eclipse.jface,
  org.eclipse.core.filebuffers,
- org.eclipse.ui.editors
+ org.eclipse.ui.editors,
+ jp.hishidama.asakusafw_wrapper
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: plugin.jar,

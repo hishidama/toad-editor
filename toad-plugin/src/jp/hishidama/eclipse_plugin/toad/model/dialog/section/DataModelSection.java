@@ -4,12 +4,14 @@ import static jp.hishidama.eclipse_plugin.util.StringUtil.nonNull;
 
 import java.util.List;
 
+import jp.hishidama.eclipse_plugin.asakusafw_wrapper.dmdl.DataModelType;
 import jp.hishidama.eclipse_plugin.toad.model.dialog.PropertyDialog;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.GuessDataModelType;
 import jp.hishidama.eclipse_plugin.toad.model.property.datamodel.DataModelNodeUtil;
 import jp.hishidama.eclipse_plugin.toad.model.property.datamodel.HasDataModelNode;
 import jp.hishidama.eclipse_plugin.toad.view.SiblingDataModelTreeElement;
 import jp.hishidama.eclipse_plugin.util.ToadCommandUtil;
+import jp.hishidama.xtext.dmdl_editor.dmdl.DataModelTypeUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.ModelDefinition;
 import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUtil;
@@ -18,7 +20,6 @@ import jp.hishidama.xtext.dmdl_editor.dmdl.PropertyUtil;
 import jp.hishidama.xtext.dmdl_editor.ui.dialog.DmdlModelSelectionDialog;
 import jp.hishidama.xtext.dmdl_editor.ui.wizard.EditDataModelWizard;
 import jp.hishidama.xtext.dmdl_editor.ui.wizard.NewDataModelWizard;
-import jp.hishidama.xtext.dmdl_editor.ui.wizard.page.DataModelType;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -183,7 +184,7 @@ public class DataModelSection extends PropertySection {
 		}
 
 		ModelDefinition m = ModelUiUtil.findModel(getProject(), model.getModelName());
-		return DataModelType.valueOf(m);
+		return DataModelTypeUtil.valueOf(m);
 	}
 
 	void confirmSiblingDataModel() {

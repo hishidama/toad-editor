@@ -3,13 +3,13 @@ package jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.hishidama.eclipse_plugin.asakusafw_wrapper.dmdl.DataModelType;
 import jp.hishidama.eclipse_plugin.toad.clazz.JavadocClass;
 import jp.hishidama.eclipse_plugin.toad.editor.handler.dslgen.OperatorMethodGenerator;
 import jp.hishidama.eclipse_plugin.toad.model.node.Attribute;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.GuessDataModelType;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
 import jp.hishidama.eclipse_plugin.toad.validation.ValidateType;
-import jp.hishidama.xtext.dmdl_editor.ui.wizard.page.DataModelType;
 
 import org.eclipse.core.runtime.IStatus;
 

@@ -3,6 +3,7 @@ package jp.hishidama.eclipse_plugin.toad.model.dialog.section;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.hishidama.eclipse_plugin.asakusafw_wrapper.dmdl.DataModelType;
 import jp.hishidama.eclipse_plugin.jface.ModifiableTable;
 import jp.hishidama.eclipse_plugin.toad.model.dialog.PropertyDialog;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
@@ -17,7 +18,6 @@ import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.Property;
 import jp.hishidama.xtext.dmdl_editor.ui.wizard.EditDataModelWizard;
 import jp.hishidama.xtext.dmdl_editor.ui.wizard.NewDataModelWizard;
-import jp.hishidama.xtext.dmdl_editor.ui.wizard.page.DataModelType;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.window.Window;

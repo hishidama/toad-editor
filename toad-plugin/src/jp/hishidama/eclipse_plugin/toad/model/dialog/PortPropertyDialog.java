@@ -3,6 +3,7 @@ package jp.hishidama.eclipse_plugin.toad.model.dialog;
 import java.util.Collections;
 import java.util.List;
 
+import jp.hishidama.eclipse_plugin.asakusafw_wrapper.dmdl.DataModelType;
 import jp.hishidama.eclipse_plugin.toad.editor.ToadEditor;
 import jp.hishidama.eclipse_plugin.toad.model.dialog.section.PropertySection;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
@@ -13,7 +14,6 @@ import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserMaster
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.delegator.UserSummarize;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.BasePort;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
-import jp.hishidama.xtext.dmdl_editor.ui.wizard.page.DataModelType;
 
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
