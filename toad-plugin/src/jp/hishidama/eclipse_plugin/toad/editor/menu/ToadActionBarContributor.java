@@ -36,6 +36,7 @@ public class ToadActionBarContributor extends ActionBarContributor {
 
 	@Override
 	protected void declareGlobalActionKeys() {
+		addGlobalActionKey(ActionFactory.PRINT.getId());
 		addGlobalActionKey(ActionFactory.CUT.getId());
 		addGlobalActionKey(ActionFactory.COPY.getId());
 		addGlobalActionKey(ActionFactory.PASTE.getId());
