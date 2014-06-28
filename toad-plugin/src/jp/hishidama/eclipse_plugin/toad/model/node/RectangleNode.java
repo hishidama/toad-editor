@@ -18,6 +18,7 @@ public abstract class RectangleNode extends NodeElement {
 	static final String PROP_Y = "y";
 	static final String PROP_WIDTH = "width";
 	static final String PROP_HEIGHT = "height";
+	public static final String PROP_PARAMETER = "parameter";
 
 	@Expose
 	private int x;

@@ -14,6 +14,7 @@ import jp.hishidama.eclipse_plugin.toad.editor.handler.dslgen.OperatorMethodGene
 import jp.hishidama.eclipse_plugin.toad.model.node.Attribute;
 import jp.hishidama.eclipse_plugin.toad.model.node.NodeElement;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.GuessDataModelType;
+import jp.hishidama.eclipse_plugin.toad.model.node.operator.OpeParameter;
 import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
 import jp.hishidama.eclipse_plugin.toad.model.property.datamodel.DataModelNodeUtil;
@@ -191,6 +192,26 @@ public abstract class OperatorDelegate {
 
 	public List<String> getPortRoleList(boolean in) {
 		return Collections.emptyList();
+	}
+
+	public String getToolTipInformation() {
+		StringBuilder sb = new StringBuilder(128);
+		boolean first = true;
+		for (OpeParameter param : node.getParameterList()) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append("\n");
+			}
+			sb.append(param.getName());
+			sb.append(" = ");
+			sb.append(param.getValue());
+		}
+
+		if (sb.length() == 0) {
+			return null;
+		}
+		return sb.toString();
 	}
 
 	public abstract void setDescription(JavadocClass javadoc);

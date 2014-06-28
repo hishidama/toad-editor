@@ -16,6 +16,7 @@ public abstract class BasicNodeFigure extends RectangleFigure {
 
 	protected Label typeLabel;
 	protected TextFlow descLabel;
+	private String toolTipInformation;
 	private Label tip;
 
 	public BasicNodeFigure() {
@@ -52,6 +53,11 @@ public abstract class BasicNodeFigure extends RectangleFigure {
 		resetToolTip();
 	}
 
+	public void setToolTipInformation(String information) {
+		toolTipInformation = information;
+		resetToolTip();
+	}
+
 	public IFigure getDirectEditTarget() {
 		return descLabel;
 	}
@@ -68,6 +74,12 @@ public abstract class BasicNodeFigure extends RectangleFigure {
 				sb.append('\n');
 			}
 			sb.append(desc);
+		}
+		if (toolTipInformation != null) {
+			if (sb.length() > 0) {
+				sb.append('\n');
+			}
+			sb.append(toolTipInformation);
 		}
 		if (sb.length() > 0) {
 			if (tip == null) {

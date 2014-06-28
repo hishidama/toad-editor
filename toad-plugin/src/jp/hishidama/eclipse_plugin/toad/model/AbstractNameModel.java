@@ -113,6 +113,10 @@ public abstract class AbstractNameModel extends AbstractModel {
 		return getDescription();
 	}
 
+	public String getToolTipInformation() {
+		return null;
+	}
+
 	@Override
 	public final String toString() {
 		return String.format("%s(%s)", getNodeDescription(), getDisplayName());

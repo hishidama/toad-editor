@@ -51,6 +51,11 @@ public abstract class NodeElementEditPart extends AbstractModelEditPart implemen
 		}
 	}
 
+	protected final void refreshToolTipInformation(BasicNodeFigure figure) {
+		NodeElement model = getModel();
+		figure.setToolTipInformation(model.getToolTipInformation());
+	}
+
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new NodeComponentEditPolicy());

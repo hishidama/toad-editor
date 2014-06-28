@@ -144,7 +144,7 @@ public class FlowpartFrameNode extends FrameNode {
 	}
 
 	public void fireParameterChange() {
-		firePropertyChange("parameter", null, null);
+		firePropertyChange(PROP_PARAMETER, null, null);
 	}
 
 	@Override

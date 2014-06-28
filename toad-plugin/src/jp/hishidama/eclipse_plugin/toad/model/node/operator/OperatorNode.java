@@ -335,7 +335,7 @@ public class OperatorNode extends RectangleNode implements ClassNameNode, HasPor
 	}
 
 	public void fireParameterChange() {
-		firePropertyChange("parameter", null, null);
+		firePropertyChange(PROP_PARAMETER, null, null);
 	}
 
 	private void setPropertyMap(Map<String, String> map) {
@@ -488,6 +488,11 @@ public class OperatorNode extends RectangleNode implements ClassNameNode, HasPor
 
 	public boolean enableTypeParameter() {
 		return getDelegate().enableTypeParameter();
+	}
+
+	@Override
+	public String getToolTipInformation() {
+		return getDelegate().getToolTipInformation();
 	}
 
 	@Override
