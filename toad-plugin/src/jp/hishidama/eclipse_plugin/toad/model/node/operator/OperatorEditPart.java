@@ -36,6 +36,7 @@ public class OperatorEditPart extends BasicNodeEditPart {
 		String name = event.getPropertyName();
 		if (NodeElement.PROP_CHILDREN.equals(name)) {
 			getParent().refresh();
+			refreshToolTipInformation(getFigure());
 		} else if (OperatorNode.PROP_PARAMETER.equals(name)) {
 			refreshToolTipInformation(getFigure());
 		}

@@ -21,6 +21,7 @@ import jp.hishidama.eclipse_plugin.toad.model.property.datamodel.DataModelNodeUt
 import jp.hishidama.eclipse_plugin.toad.model.property.datamodel.HasDataModelNode;
 import jp.hishidama.eclipse_plugin.toad.validation.ValidateType;
 import jp.hishidama.eclipse_plugin.toad.view.SiblingDataModelTreeElement;
+import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.xtext.dmdl_editor.validation.ErrorStatus;
 
 import org.eclipse.core.runtime.IStatus;
@@ -195,23 +196,46 @@ public abstract class OperatorDelegate {
 	}
 
 	public String getToolTipInformation() {
-		StringBuilder sb = new StringBuilder(128);
-		boolean first = true;
+		StringBuilder sb = new StringBuilder(256);
+		appendPortToolTip(sb);
+		appendParameterToolTip(sb);
+		return (sb.length() == 0) ? null : sb.toString();
+	}
+
+	protected void appendPortToolTip(StringBuilder sb) {
+		appendPortToolTip(sb, node.getInputPorts(), null);
+		appendPortToolTip(sb, node.getOutputPorts(), "-> ");
+	}
+
+	private void appendPortToolTip(StringBuilder sb, List<OpePort> list, String prefix) {
+		for (OpePort port : list) {
+			if (sb.length() != 0) {
+				sb.append("\n");
+			}
+			if (prefix != null) {
+				sb.append(prefix);
+			}
+			sb.append(port.getName());
+			sb.append(" ");
+			sb.append(port.getModelName());
+
+			String desc = port.getModelDescription();
+			if (StringUtil.nonEmpty(desc)) {
+				sb.append(" : ");
+				sb.append(desc);
+			}
+		}
+	}
+
+	protected void appendParameterToolTip(StringBuilder sb) {
 		for (OpeParameter param : node.getParameterList()) {
-			if (first) {
-				first = false;
-			} else {
+			if (sb.length() != 0) {
 				sb.append("\n");
 			}
 			sb.append(param.getName());
 			sb.append(" = ");
 			sb.append(param.getValue());
 		}
-
-		if (sb.length() == 0) {
-			return null;
-		}
-		return sb.toString();
 	}
 
 	public abstract void setDescription(JavadocClass javadoc);
