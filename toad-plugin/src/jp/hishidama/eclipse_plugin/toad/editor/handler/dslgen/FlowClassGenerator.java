@@ -157,6 +157,10 @@ public abstract class FlowClassGenerator<F extends FrameNode> extends DiagramDsl
 	private Map<String, String> factoryVarMap = new LinkedHashMap<String, String>();
 
 	private String getFactoryVariableName(String factoryName, boolean isFlowPart) {
+		if (isFlowPart) {
+			return String.format("new %s()", getCachedClassName(factoryName));
+		}
+
 		String name = factoryVarMap.get(factoryName);
 		if (name != null) {
 			return name;
@@ -164,14 +168,8 @@ public abstract class FlowClassGenerator<F extends FrameNode> extends DiagramDsl
 		if (factoryName.equals(CORE_OP_FACTORY)) {
 			name = "core";
 		} else {
-			name = factoryName;
-			int n = name.lastIndexOf('.');
-			if (n >= 0) {
-				name = name.substring(n + 1);
-			}
-			if (!isFlowPart) {
-				name = StringUtil.removeEnds(name, "Factory");
-			}
+			name = StringUtil.getSimpleName(factoryName);
+			name = StringUtil.removeEnds(name, "Factory");
 			name = StringUtil.toFirstLower(name);
 		}
 		name = getIdentifiedName(name);
@@ -417,7 +415,14 @@ public abstract class FlowClassGenerator<F extends FrameNode> extends DiagramDsl
 
 		@Override
 		public String createVariableName() {
-			return StringUtil.toFirstLower(node.getMethodName());
+			String name;
+			if (node.isFlowPart()) {
+				name = StringUtil.getSimpleName(getFactoryName());
+				name = StringUtil.removeEnds(name, "Factory");
+			} else {
+				name = node.getMethodName();
+			}
+			return StringUtil.toFirstLower(name);
 		}
 
 		@Override
