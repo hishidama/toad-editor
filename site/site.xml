@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/jp.hishidama.toad_editor.feature_0.0.1.201406281209.jar" id="jp.hishidama.toad_editor.feature" version="0.0.1.201406281209">
+   <feature url="features/jp.hishidama.toad_editor.feature_0.0.1.201411291118.jar" id="jp.hishidama.toad_editor.feature" version="0.0.1.201411291118">
       <category name="jp.hishidama.toad_editor"/>
    </feature>
    <category-def name="jp.hishidama.toad_editor" label="Asakusa Toad Editor"/>
