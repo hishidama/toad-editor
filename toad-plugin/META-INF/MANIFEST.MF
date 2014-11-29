@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface,
  org.eclipse.core.filebuffers,
  org.eclipse.ui.editors,
- jp.hishidama.asakusafw_wrapper
+ jp.hishidama.asakusafw_wrapper,
+ org.eclipse.xtext.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: plugin.jar,
