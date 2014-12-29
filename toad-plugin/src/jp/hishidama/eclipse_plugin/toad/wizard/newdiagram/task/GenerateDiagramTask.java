@@ -49,9 +49,9 @@ public class GenerateDiagramTask implements IRunnableWithProgress {
 						first = target;
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new InvocationTargetException(e);
 				} catch (CoreException e) {
-					e.printStackTrace();
+					throw new InvocationTargetException(e);
 				}
 				monitor.worked(1);
 			}
