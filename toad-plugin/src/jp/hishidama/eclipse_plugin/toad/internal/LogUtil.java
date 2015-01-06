@@ -1,6 +1,7 @@
 package jp.hishidama.eclipse_plugin.toad.internal;
 
 import jp.hishidama.eclipse_plugin.toad.Activator;
+import jp.hishidama.eclipse_plugin.util.StringUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -17,6 +18,20 @@ public class LogUtil {
 
 	public static IStatus errorStatus(String message, Throwable t) {
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, message, t);
+	}
+
+	public static IStatus causeStatus(Throwable t) {
+		String message = null;
+		Throwable cause = t;
+		for (; t != null; t = t.getCause()) {
+			cause = t;
+			String m = t.getMessage();
+			message = t.getClass().getName();
+			if (StringUtil.nonEmpty(m)) {
+				message += ": " + m;
+			}
+		}
+		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, message, cause);
 	}
 
 	public static IStatus logInfo(String message) {

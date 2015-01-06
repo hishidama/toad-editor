@@ -8,7 +8,6 @@ import jp.hishidama.eclipse_plugin.toad.internal.LogUtil;
 import jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.page.FlowpartParameterPage;
 import jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.page.SelectClassPage;
 import jp.hishidama.eclipse_plugin.toad.wizard.newdiagram.task.GenerateDiagramTask;
-import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.eclipse_plugin.util.ToadFileUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -93,15 +92,9 @@ public class ReverseWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(true, true, task);
 		} catch (Exception e) {
-			IStatus status = LogUtil.logError("ReverseWizard error.", e);
-			String message = null;
-			for (Throwable cause = e; cause != null; cause = cause.getCause()) {
-				message = cause.getMessage();
-				if (StringUtil.nonEmpty(message)) {
-					break;
-				}
-			}
-			ErrorDialog.openError(getShell(), "ReverseWizard error", message, status);
+			LogUtil.logError("ReverseWizard error.", e);
+			IStatus status = LogUtil.causeStatus(e);
+			ErrorDialog.openError(getShell(), "ReverseWizard error", "ReverseWizard error.", status);
 			return false;
 		}
 
