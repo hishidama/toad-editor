@@ -1,6 +1,7 @@
 package jp.hishidama.eclipse_plugin.toad.importer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.asakusafw.compiler.flow.plan.FlowGraphUtil;
 import com.asakusafw.vocabulary.flow.graph.FlowElement;
 import com.asakusafw.vocabulary.flow.graph.FlowElementInput;
 import com.asakusafw.vocabulary.flow.graph.FlowElementOutput;
@@ -26,13 +26,37 @@ public class GenerateFlowDiagram {
 
 	public Collection<Map<String, Object>> getDependencies(String className, List<String> parameterNames,
 			Map<String, Object> parameterValues, int seed) throws Exception {
-		FlowDriver driver = new FlowDriver(className, parameterNames, parameterValues);
-		FlowGraph graph = driver.analyze();
-		List<Object> ports = driver.getPorts();
-		return getDependencies(graph, ports, seed);
+		FlowGraphGenerator generator = getFlowGraphGenerator();
+		FlowGraph graph = generator.analyze(className, parameterNames, parameterValues);
+		return getDependencies(graph, seed);
 	}
 
-	protected Collection<Map<String, Object>> getDependencies(FlowGraph graph, List<Object> ports, int seed) {
+	private FlowGraphGenerator getFlowGraphGenerator() {
+		List<String> versionList = Arrays.asList("0100", "040");
+
+		Throwable last = null;
+		for (String version : versionList) {
+			try {
+				@SuppressWarnings("unchecked")
+				Class<FlowGraphGenerator> c = (Class<FlowGraphGenerator>) Class.forName(FlowGraphGenerator.class
+						.getName() + version);
+				FlowGraphGenerator generator = c.newInstance();
+				generator.checkVersion();
+				return generator;
+			} catch (NoClassDefFoundError e) {
+				last = e;
+			} catch (Exception e) {
+				last = e;
+			}
+		}
+
+		if (last instanceof Error) {
+			throw (Error) last;
+		}
+		throw new RuntimeException(last);
+	}
+
+	protected Collection<Map<String, Object>> getDependencies(FlowGraph graph, int seed) {
 		// node
 		AtomicInteger id = new AtomicInteger(seed);
 		Map<FlowElement, RevNode> map = new LinkedHashMap<FlowElement, RevNode>();
@@ -74,32 +98,26 @@ public class GenerateFlowDiagram {
 			}
 		}
 
-		sortImporter(ports);
-		sortExporter(ports);
+		sortImporter(graph.getFlowInputs());
+		sortExporter(graph.getFlowOutputs());
 
 		return list;
 	}
 
-	private void sortImporter(List<Object> ports) {
-		final List<String> names = new ArrayList<String>();
-		for (Object obj : ports) {
-			if (obj instanceof FlowIn) {
-				FlowIn<?> in = (FlowIn<?>) obj;
-				String name = in.getDescription().getName();
-				names.add(name);
-			}
+	private void sortImporter(List<FlowIn<?>> list) {
+		final List<String> names = new ArrayList<String>(list.size());
+		for (FlowIn<?> in : list) {
+			String name = in.getDescription().getName();
+			names.add(name);
 		}
 		Collections.sort(importer, new Sorter(names));
 	}
 
-	private void sortExporter(List<Object> ports) {
-		final List<String> names = new ArrayList<String>();
-		for (Object obj : ports) {
-			if (obj instanceof FlowOut) {
-				FlowOut<?> out = (FlowOut<?>) obj;
-				String name = out.getDescription().getName();
-				names.add(name);
-			}
+	private void sortExporter(List<FlowOut<?>> list) {
+		final List<String> names = new ArrayList<String>(list.size());
+		for (FlowOut<?> out : list) {
+			String name = out.getDescription().getName();
+			names.add(name);
 		}
 		Collections.sort(exporter, new Sorter(names));
 	}

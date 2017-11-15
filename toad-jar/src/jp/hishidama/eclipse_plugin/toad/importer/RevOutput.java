@@ -38,8 +38,10 @@ public class RevOutput extends RevNode {
 		map.put("modelClassName", getClassName(description.getDataType()));
 
 		ExporterDescription edesc = description.getExporterDescription();
-		map.put("fileId", fileId);
-		map.put("fileClassName", getClassName(edesc.getClass()));
-		map.put("fileModelClassName", getClassName(edesc.getModelType()));
+		if (edesc != null) {
+			map.put("fileId", fileId);
+			map.put("fileClassName", getClassName(edesc.getClass()));
+			map.put("fileModelClassName", getClassName(edesc.getModelType()));
+		}
 	}
 }

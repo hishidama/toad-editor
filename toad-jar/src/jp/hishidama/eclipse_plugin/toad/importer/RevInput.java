@@ -38,9 +38,11 @@ public class RevInput extends RevNode {
 		map.put("modelClassName", getClassName(description.getDataType()));
 
 		ImporterDescription idesc = description.getImporterDescription();
-		map.put("fileId", fileId);
-		map.put("fileClassName", getClassName(idesc.getClass()));
-		map.put("fileModelClassName", getClassName(idesc.getModelType()));
-		map.put("fileDataSize", idesc.getDataSize().name());
+		if (idesc != null) {
+			map.put("fileId", fileId);
+			map.put("fileClassName", getClassName(idesc.getClass()));
+			map.put("fileModelClassName", getClassName(idesc.getModelType()));
+			map.put("fileDataSize", idesc.getDataSize().name());
+		}
 	}
 }
