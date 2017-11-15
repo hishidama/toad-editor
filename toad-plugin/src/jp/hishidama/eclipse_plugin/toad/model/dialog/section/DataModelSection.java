@@ -17,6 +17,7 @@ import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.Property;
 import jp.hishidama.xtext.dmdl_editor.dmdl.PropertyUtil;
+import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUtil.PropertyFilter;
 import jp.hishidama.xtext.dmdl_editor.ui.dialog.DmdlModelSelectionDialog;
 import jp.hishidama.xtext.dmdl_editor.ui.wizard.EditDataModelWizard;
 import jp.hishidama.xtext.dmdl_editor.ui.wizard.NewDataModelWizard;
@@ -280,7 +281,7 @@ public class DataModelSection extends PropertySection {
 		modelTable.removeAll();
 		ModelDefinition model = ModelUiUtil.findModel(getProject(), modelName, getContainer());
 		if (model != null) {
-			List<Property> properties = ModelUtil.getProperties(model);
+			List<Property> properties = ModelUtil.getProperties(model, PropertyFilter.ALL);
 			for (Property p : properties) {
 				TableItem item = new TableItem(modelTable, SWT.NONE);
 				item.setText(0, p.getName());

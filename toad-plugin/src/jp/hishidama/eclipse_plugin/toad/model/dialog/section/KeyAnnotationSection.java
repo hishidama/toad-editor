@@ -9,6 +9,7 @@ import jp.hishidama.eclipse_plugin.toad.model.node.operator.OperatorNode;
 import jp.hishidama.eclipse_plugin.toad.model.node.port.OpePort;
 import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.Property;
+import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUtil.PropertyFilter;
 
 import org.eclipse.jface.window.Window;
 
@@ -60,7 +61,7 @@ public class KeyAnnotationSection extends KeySection {
 		List<String> values = new ArrayList<String>(element.name);
 		if (dropList.isEmpty()) {
 			for (String modelName : titleList) {
-				List<Property> plist = ModelUiUtil.getProperties(getProject(), modelName, getContainer());
+				List<Property> plist = ModelUiUtil.getProperties(getProject(), modelName, getContainer(), PropertyFilter.ALL);
 				List<String> list = convert(plist);
 				dropList.add(list);
 			}

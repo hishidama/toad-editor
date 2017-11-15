@@ -10,6 +10,7 @@ import java.util.Map;
 import jp.hishidama.eclipse_plugin.toad.model.node.Attribute;
 import jp.hishidama.eclipse_plugin.util.StringUtil;
 import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUiUtil;
+import jp.hishidama.xtext.dmdl_editor.dmdl.ModelUtil.PropertyFilter;
 import jp.hishidama.xtext.dmdl_editor.dmdl.Property;
 
 import org.eclipse.core.resources.IProject;
@@ -58,7 +59,7 @@ public abstract class KeyDialog extends AttributeDialog {
 		table = createCheckedTable(composite, parameterName);
 		createTableColumns(table);
 
-		propertyList = ModelUiUtil.getProperties(project, modelName);
+		propertyList = ModelUiUtil.getProperties(project, modelName, PropertyFilter.ALL);
 		if (propertyList == null) {
 			propertyList = Collections.emptyList();
 		}

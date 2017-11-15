@@ -1,0 +1,1 @@
+Eclipseから、手動でtoad-pluginプロジェクトを依存関係に追加する
