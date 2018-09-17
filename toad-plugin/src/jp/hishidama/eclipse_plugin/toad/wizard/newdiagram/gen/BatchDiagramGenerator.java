@@ -29,7 +29,7 @@ import org.eclipse.jdt.core.JavaModelException;
 public class BatchDiagramGenerator extends DiagramFileGenerator {
 
 	public static BatchClass findBatch(IFile file) {
-		ICompilationUnit unit = JdtUtil.getJavaUnit(file);
+		ICompilationUnit unit = JdtUtil.getCompilationUnit(file);
 		if (unit == null) {
 			return null;
 		}

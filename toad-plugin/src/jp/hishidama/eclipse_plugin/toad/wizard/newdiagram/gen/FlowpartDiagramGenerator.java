@@ -32,7 +32,7 @@ public class FlowpartDiagramGenerator extends FlowDiagramGenerator {
 	}
 
 	public static FlowPartClass findFlowpart(IFile file) {
-		ICompilationUnit unit = JdtUtil.getJavaUnit(file);
+		ICompilationUnit unit = JdtUtil.getCompilationUnit(file);
 		if (unit == null) {
 			return null;
 		}

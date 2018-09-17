@@ -26,7 +26,7 @@ public class JobDiagramGenerator extends FlowDiagramGenerator {
 	}
 
 	public static JobFlowClass findJobflow(IFile file) {
-		ICompilationUnit unit = JdtUtil.getJavaUnit(file);
+		ICompilationUnit unit = JdtUtil.getCompilationUnit(file);
 		if (unit == null) {
 			return null;
 		}
